@@ -1,0 +1,19 @@
+name: Sugerir melhoria
+description: Novo comando, nova opção ou melhoria de documentação
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: O que você precisa
+      description: Descreva o cenário de integração e o que a biblioteca deveria oferecer.
+    validations:
+      required: true
+  - type: textarea
+    id: protocol
+    attributes:
+      label: Detalhes do protocolo (se aplicável)
+      description: Comando, layout dos bytes, exemplos de quadro capturados.
+      render: text
+    validations:
+      required: false

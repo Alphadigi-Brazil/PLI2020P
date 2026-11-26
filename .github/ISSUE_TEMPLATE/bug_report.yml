@@ -1,0 +1,53 @@
+name: Relatar problema
+description: Algo não aparece no painel, ou aparece diferente do esperado
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar! Quanto mais dados do quadro RS485 você colar, mais rápido
+        conseguimos identificar o problema.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: O que aconteceu
+      description: Descreva o comportamento observado.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: O que era esperado
+    validations:
+      required: true
+  - type: textarea
+    id: hex
+    attributes:
+      label: Hex do quadro e/ou Base64 gerado
+      description: Use `frames.get(i).getHex()` ou o JSON enviado à câmera.
+      render: text
+    validations:
+      required: false
+  - type: input
+    id: panel
+    attributes:
+      label: Modelo/firmware do painel
+      placeholder: PLI2020P, firmware ...
+  - type: input
+    id: camera
+    attributes:
+      label: Modelo da câmera LPR
+  - type: input
+    id: lib-version
+    attributes:
+      label: Versão da biblioteca
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: java
+    attributes:
+      label: Versão do Java
+      placeholder: 8 / 11 / 17 / 21
+    validations:
+      required: true

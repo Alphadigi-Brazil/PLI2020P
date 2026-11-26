@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>br.com.alphadigi</groupId>
+  <artifactId>pli2020p</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>PLI2020P LED Panel Encoder</name>
+  <description>
+    Encodes up to four text lines (with per-line colour) and a traffic-light pulse into the
+    RS485 frames of the PLI2020P LED display controller, and returns them as Base64 + dataLen
+    ready to be placed in an LPR camera HTTP response.
+  </description>
+  <url>https://github.com/alphadigi-brazil/PLI2020P</url>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Alpha Digi Brazil</name>
+      <email>zimin@alphadigi.com.br</email>
+      <organization>Alpha Digi Brazil</organization>
+      <organizationUrl>https://github.com/alphadigi-brazil</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/alphadigi-brazil/PLI2020P.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/alphadigi-brazil/PLI2020P.git</developerConnection>
+    <url>https://github.com/alphadigi-brazil/PLI2020P</url>
+    <tag>v1.0.0</tag>
+  </scm>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <junit.version>5.10.2</junit.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>br.com.alphadigi.pli2020p</Automatic-Module-Name>
+              <Implementation-Title>${project.name}</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

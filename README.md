@@ -14,13 +14,14 @@ a biblioteca devolve o **Base64** e o **dataLen** que a câmera LPR espera no ca
 
 ## Comece por aqui
 
-Três caminhos. Escolha o que combina com o seu caso — todos geram exatamente os mesmos bytes.
+Quatro caminhos. Escolha o que combina com o seu caso — todos geram exatamente os mesmos bytes.
 
 | Caminho | Para quem | O que fazer |
 |---|---|---|
 | **[Calculadora online](https://alphadigi-brazil.github.io/PLI2020P/calculadora.html)** | quer testar agora, sem programar | digite as linhas, copie o JSON e cole na sua plataforma |
 | **[Um arquivo Java](standalone/Pli2020p.java)** | projeto Java sem Maven | copie 1 arquivo para o projeto e chame `Pli2020p.encode(...)` |
 | **[Maven](pom.xml)** | projeto Java com Maven | `mvn install` + dependência `br.com.alphadigi:pli2020p` |
+| **[Python](python/pli2020p.py)** | projeto Python | copie um arquivo e chame `encode(...)` |
 
 ### 1. Calculadora (sem escrever código)
 
@@ -70,7 +71,7 @@ mvn install
 <dependency>
   <groupId>br.com.alphadigi</groupId>
   <artifactId>pli2020p</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -89,6 +90,37 @@ PliDisplayRequest request = PliDisplayRequest.builder()
 List<SerialData> frames = Pli2020pEncoder.encode(request);
 String json = "{" + Pli2020pEncoder.toJsonArray(frames) + "}";
 ```
+
+### 4. Python
+
+Copie [`python/pli2020p.py`](python/pli2020p.py) para o seu projeto (arquivo único, Python 3.8+,
+sem `pip install`, sem dependências):
+
+```python
+from pli2020p import encode, json_array
+
+quadros = encode(
+    ["`D-`M-20`Y", "`H:`N:`S", "Vaga 999", "Bem-vindo!"],
+    ["GREEN", "GREEN", "YELLOW", "GREEN"],
+    green_seconds=5,
+)
+
+quadros[0].base64      # "AGT//25SAAQ..."
+quadros[0].data_len    # 90
+
+resposta = json_array(quadros)          # '"serialData":[...]'
+# ou, o JSON completo que você devolve no POST da câmera:
+from pli2020p import to_json
+to_json(quadros)                        # '{"serialData":[...]}'
+```
+
+Detalhes da versão Python:
+
+- `None` em uma linha mantém a linha como está; `""` apaga a linha;
+- aceita também uma única string: `encode("Bem-vindo!")`;
+- cores: `"RED"`, `"GREEN"`, `"YELLOW"`, `"OFF"`, `"#RRGGBB"` ou tupla `(r, g, b)`;
+- chinês: `encode(["光临"], encoding="gbk")` (padrão UTF-8);
+- autoteste: `python pli2020p.py --selftest`.
 
 ---
 
@@ -298,25 +330,31 @@ O painel desliga o relé sozinho ao fim do tempo e volta ao vermelho.
 ## Desenvolvimento
 
 ```bash
-mvn verify                                                        # 18 testes
+mvn verify                                                        # 18 testes Java
 java -cp target/classes br.com.alphadigi.pli2020p.demo.PliDemo    # imprime os quadros
-java -cp target/standalone pli2020p.Pli2020p --selftest           # arquivo único
+java -cp target/standalone pli2020p.Pli2020p --selftest           # arquivo único Java
 node tools/check-calculator.js                                    # calculadora == Java
+
+python -m unittest discover -s python/tests -v                    # 24 testes Python
+python python/pli2020p.py --selftest                              # autoteste do módulo Python
 ```
 
-CI roda tudo em Java 8, 11, 17 e 21 ([workflow](.github/workflows/build.yml)).
+CI roda tudo em Java 8, 11, 17 e 21, e em Python 3.9, 3.12 e 3.13
+([workflow](.github/workflows/build.yml)).
 
 Os testes comparam a saída, byte a byte, com quadros capturados de instalações reais — não são
-valores inventados.
+valores inventados. As versões Java e Python produzem **bytes idênticos** para as mesmas entradas.
 
 ---
 
 ## Estrutura
 
 ```
-src/main/java/br/com/alphadigi/pli2020p/   biblioteca (9 classes)
+src/main/java/br/com/alphadigi/pli2020p/   biblioteca Java (9 classes)
 src/test/java/...                          18 testes de regressão
-standalone/Pli2020p.java                   versão de arquivo único
+standalone/Pli2020p.java                   versão de arquivo único (Java)
+python/pli2020p.py                         versão de arquivo único (Python)
+python/tests/test_pli2020p.py              24 testes
 docs/calculadora.html                      calculadora offline
 docs/PROTOCOL.md                           referência do protocolo
 docs/index.html                            página inicial das ferramentas

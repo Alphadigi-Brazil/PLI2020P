@@ -3,6 +3,22 @@
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 Versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.1.0] - 2026-11-26
+
+### Adicionado
+
+- **Versão em Python** (`python/pli2020p.py`): arquivo único, Python 3.8+, sem dependências,
+  mesma API conceitual da versão Java (`encode`, `Frame.base64`, `Frame.data_len`, `to_json`),
+  suporte a `encoding="gbk"` e `--selftest`.
+- 24 testes em `python/tests/test_pli2020p.py` (unittest, sem `pip install`).
+- CI ganhou uma matriz Python (3.9, 3.12, 3.13).
+- README em português e inglês atualizados com o caminho Python.
+
+### Verificação
+
+As implementações Java e Python geram **bytes idênticos** para as mesmas entradas, incluindo
+acentos em UTF-8 e chinês em GBK.
+
 ## [1.0.0] - 2026-11-26
 
 ### Adicionado

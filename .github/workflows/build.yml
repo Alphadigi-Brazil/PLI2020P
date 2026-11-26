@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  java:
     name: Java ${{ matrix.java }}
     runs-on: ubuntu-latest
     strategy:
@@ -42,3 +42,24 @@ jobs:
       - name: Demo output
         if: matrix.java == '17'
         run: java -cp target/classes br.com.alphadigi.pli2020p.demo.PliDemo
+
+  python:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.9', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Unit tests
+        run: python -m unittest discover -s python/tests -v
+
+      - name: Self test
+        run: python python/pli2020p.py --selftest

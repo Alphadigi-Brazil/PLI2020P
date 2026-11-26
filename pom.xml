@@ -6,7 +6,7 @@
 
   <groupId>br.com.alphadigi</groupId>
   <artifactId>pli2020p</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
 
   <name>PLI2020P LED Panel Encoder</name>
@@ -38,7 +38,7 @@
     <connection>scm:git:git://github.com/Alphadigi-Brazil/PLI2020P.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/Alphadigi-Brazil/PLI2020P.git</developerConnection>
     <url>https://github.com/Alphadigi-Brazil/PLI2020P</url>
-    <tag>v1.0.0</tag>
+    <tag>v1.1.0</tag>
   </scm>
 
   <properties>

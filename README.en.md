@@ -13,7 +13,7 @@ stays green; the library returns the **Base64** and **dataLen** the LPR camera e
 
 ---
 
-## Three ways to use it
+## Four ways to use it
 
 All three produce exactly the same bytes.
 
@@ -22,6 +22,7 @@ All three produce exactly the same bytes.
 | **[Web calculator](https://alphadigi-brazil.github.io/PLI2020P/calculadora.html)** | try it without coding | type the lines, copy the JSON, paste it into your platform |
 | **[Single Java file](standalone/Pli2020p.java)** | Java project without Maven | copy one file into your project and call `Pli2020p.encode(...)` |
 | **[Maven](pom.xml)** | Java project with Maven | `mvn install` + depend on `br.com.alphadigi:pli2020p` |
+| **[Python](python/pli2020p.py)** | Python project | copy one file and call `encode(...)` |
 
 > The web calculator is in Portuguese because that is the language of the field teams.
 
@@ -59,7 +60,7 @@ mvn install
 <dependency>
   <groupId>br.com.alphadigi</groupId>
   <artifactId>pli2020p</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -75,6 +76,31 @@ PliDisplayRequest request = PliDisplayRequest.builder()
 List<SerialData> frames = Pli2020pEncoder.encode(request);
 String json = "{" + Pli2020pEncoder.toJsonArray(frames) + "}";
 ```
+
+### 4. Python
+
+Copy [`python/pli2020p.py`](python/pli2020p.py) into your project (single file, Python 3.8+, no
+`pip install`, no dependencies):
+
+```python
+from pli2020p import encode, to_json
+
+frames = encode(
+    ["`D-`M-20`Y", "`H:`N:`S", "Vaga 999", "Bem-vindo!"],
+    ["GREEN", "GREEN", "YELLOW", "GREEN"],
+    green_seconds=5,
+)
+
+frames[0].base64     # "AGT//25SAAQ..."
+frames[0].data_len   # 90
+to_json(frames)      # '{"serialData":[...]}'  <- the HTTP response body
+```
+
+- `None` keeps a line as it is; `""` clears it;
+- a single string is accepted: `encode("Bem-vindo!")`;
+- colours: `"RED"`, `"GREEN"`, `"YELLOW"`, `"OFF"`, `"#RRGGBB"` or `(r, g, b)`;
+- Chinese: `encode(["光临"], encoding="gbk")` (UTF-8 is the default);
+- self-check: `python pli2020p.py --selftest`.
 
 ---
 
@@ -219,14 +245,20 @@ If nothing shows up, check in this order: 5 V power → A/B swapped → baud rat
 ## Building and testing
 
 ```bash
-mvn verify                                                        # 18 tests
+mvn verify                                                        # 18 Java tests
 java -cp target/classes br.com.alphadigi.pli2020p.demo.PliDemo    # prints the frames
 java -cp target/standalone pli2020p.Pli2020p --selftest           # single-file version
 node tools/check-calculator.js                                    # calculator == Java
+
+python -m unittest discover -s python/tests -v                    # 24 Python tests
+python python/pli2020p.py --selftest                              # Python module self-check
 ```
 
-CI runs everything on Java 8, 11, 17 and 21 ([workflow](.github/workflows/build.yml)).
-Tests compare the output byte by byte with frames captured from real installations.
+CI runs everything on Java 8, 11, 17 and 21, and on Python 3.9, 3.12 and 3.13
+([workflow](.github/workflows/build.yml)).
+
+Tests compare the output byte by byte with frames captured from real installations. The Java and
+Python versions produce **identical bytes** for the same input.
 
 ---
 

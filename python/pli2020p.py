@@ -32,10 +32,7 @@ Auto-teste::
     python pli2020p.py --selftest
 """
 
-from __future__ import annotations
-
 import base64 as _base64
-import json as _json
 
 __version__ = "1.1.0"
 

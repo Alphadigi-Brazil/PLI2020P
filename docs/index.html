@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLI2020P — ferramentas de integração</title>
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --border:#334155; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:48px 20px; background:var(--bg); color:var(--text);
+         font:16px/1.6 -apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 1.8rem; margin: 0 0 8px; }
+  p { color: var(--muted); margin: 0 0 24px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+  a.card { display:block; padding:20px; border:1px solid var(--border); border-radius:12px;
+           background:var(--card); color:var(--text); text-decoration:none; transition:border-color .15s; }
+  a.card:hover { border-color: var(--accent); }
+  a.card strong { display:block; font-size:1.05rem; margin-bottom:4px; }
+  a.card span { color:var(--muted); font-size:.9rem; }
+  a.card.destaque { border-color: var(--accent); }
+  footer { margin-top: 32px; color: var(--muted); font-size: .85rem; }
+  @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Painel PLI2020P — ferramentas de integração</h1>
+  <p>
+    Gere o Base64 e o <code>dataLen</code> que a câmera LPR envia ao painel de LED, sem
+    precisar conhecer o protocolo HEX.
+  </p>
+
+  <div class="grid">
+    <a class="card destaque" href="calculadora.html">
+      <strong>Calculadora de mensagens</strong>
+      <span>Monte as 4 linhas, escolha as cores e copie o JSON. Funciona offline.</span>
+    </a>
+    <a class="card" href="https://github.com/Alphadigi-Brazil/PLI2020P">
+      <strong>Biblioteca Java</strong>
+      <span>Código-fonte, exemplos e instalação via Maven.</span>
+    </a>
+    <a class="card" href="https://github.com/Alphadigi-Brazil/PLI2020P/blob/main/README.md">
+      <strong>Guia de integração</strong>
+      <span>Como encaixar na resposta HTTP da câmera.</span>
+    </a>
+    <a class="card" href="https://github.com/Alphadigi-Brazil/PLI2020P/blob/main/docs/PROTOCOL.md">
+      <strong>Referência do protocolo</strong>
+      <span>Bytes, CRC e comandos, para quem quiser implementar em outra linguagem.</span>
+    </a>
+  </div>
+
+  <footer>
+    © Alpha Digi Brazil · licença MIT
+  </footer>
+</main>
+</body>
+</html>

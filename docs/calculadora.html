@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora PLI2020P — mensagens do painel de LED</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card2: #273449;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --ok: #4ade80;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px 64px;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.55 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 28px 0 10px; }
+  p.sub { margin: 0 0 20px; color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .linha { display: grid; grid-template-columns: 72px 1fr 150px; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .linha label { color: var(--muted); font-size: .9rem; }
+  input[type=text], input[type=number], select, textarea {
+    width: 100%; padding: 9px 11px; border-radius: 7px; border: 1px solid var(--border);
+    background: #0b1220; color: var(--text); font: inherit;
+  }
+  input[type=text]:focus, input[type=number]:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--accent); outline-offset: 1px;
+  }
+  textarea { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: .82rem; resize: vertical; }
+  .hint { color: var(--muted); font-size: .85rem; margin-top: 6px; }
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  button {
+    padding: 8px 14px; border-radius: 7px; border: 1px solid var(--border);
+    background: var(--card2); color: var(--text); font: inherit; cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: #06202e; border-color: var(--accent); font-weight: 600; }
+  .out { margin-top: 14px; }
+  .out-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .out-head strong { font-size: .95rem; }
+  .out-head span { color: var(--muted); font-size: .85rem; font-family: ui-monospace, Consolas, monospace; }
+  code.b64 {
+    display: block; padding: 10px 12px; border-radius: 7px; background: #0b1220;
+    border: 1px solid var(--border); word-break: break-all;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: .82rem;
+  }
+  .row-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .status { min-height: 1.2em; color: var(--ok); font-size: .85rem; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--muted); }
+  footer { max-width: 880px; margin: 32px auto 0; color: var(--muted); font-size: .85rem; }
+  a { color: var(--accent); }
+  @media (max-width: 620px) {
+    .linha { grid-template-columns: 1fr; }
+    .linha label { margin-bottom: -6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Calculadora de mensagens — painel PLI2020P</h1>
+  <p class="sub">
+    Monte as até 4 linhas, escolha a cor de cada uma e copie o <strong>Base64</strong> e o
+    <strong>dataLen</strong> para a resposta da sua plataforma. Tudo é calculado no seu
+    navegador — nada é enviado para nenhum servidor e funciona offline.
+  </p>
+
+  <div class="presets">
+    <button type="button" data-preset="entrada">Exemplo: entrada</button>
+    <button type="button" data-preset="saida">Exemplo: saída</button>
+    <button type="button" data-preset="semaforo">Só semáforo</button>
+    <button type="button" data-preset="limpar">Limpar</button>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Linhas do painel</h2>
+
+    <div class="linha">
+      <label for="t0">Linha 1</label>
+      <input id="t0" type="text" value="`D-`M-20`Y" maxlength="80" placeholder="texto da linha 1 (vazio = não mexe)">
+      <select id="c0">
+        <option value="GREEN">Verde</option>
+        <option value="RED">Vermelho</option>
+        <option value="YELLOW">Amarelo</option>
+        <option value="OFF">Apagado</option>
+      </select>
+    </div>
+
+    <div class="linha">
+      <label for="t1">Linha 2</label>
+      <input id="t1" type="text" value="`H:`N:`S" maxlength="80" placeholder="texto da linha 2 (vazio = não mexe)">
+      <select id="c1">
+        <option value="GREEN">Verde</option>
+        <option value="RED" selected>Vermelho</option>
+        <option value="YELLOW">Amarelo</option>
+        <option value="OFF">Apagado</option>
+      </select>
+    </div>
+
+    <div class="linha">
+      <label for="t2">Linha 3</label>
+      <input id="t2" type="text" value="Vaga 999" maxlength="80" placeholder="texto da linha 3 (vazio = não mexe)">
+      <select id="c2">
+        <option value="GREEN">Verde</option>
+        <option value="RED" selected>Vermelho</option>
+        <option value="YELLOW" selected>Amarelo</option>
+        <option value="OFF">Apagado</option>
+      </select>
+    </div>
+
+    <div class="linha">
+      <label for="t3">Linha 4</label>
+      <input id="t3" type="text" value="Bem-vindo!" maxlength="80" placeholder="texto da linha 4 (vazio = não mexe)">
+      <select id="c3">
+        <option value="GREEN" selected>Verde</option>
+        <option value="RED">Vermelho</option>
+        <option value="YELLOW">Amarelo</option>
+        <option value="OFF">Apagado</option>
+      </select>
+    </div>
+
+    <div class="linha" style="margin-top:14px">
+      <label for="green">Semáforo</label>
+      <div>
+        <input id="green" type="number" min="0" max="255" value="5" style="max-width:120px">
+        <span class="hint" style="display:inline">segundos de verde (0 = não mexe no semáforo)</span>
+      </div>
+      <div></div>
+    </div>
+
+    <p class="hint">
+      <strong>Data/hora automática:</strong> use <code>`D</code> dia, <code>`M</code> mês,
+      <code>`Y</code> ano, <code>`H</code> hora, <code>`N</code> minuto, <code>`S</code> segundo,
+      <code>`V</code> dia da semana. O painel atualiza sozinho.<br>
+      <strong>Apagar uma linha:</strong> escreva um espaço e escolha “Apagado”.
+    </p>
+  </div>
+
+  <div class="card out">
+    <div id="erro" class="status" style="color:#f87171"></div>
+
+    <div id="blocoTexto">
+      <div class="out-head">
+        <strong id="tituloTexto">Pacote de texto</strong>
+        <span id="metaTexto"></span>
+      </div>
+      <code class="b64" id="b64Texto"></code>
+      <div class="row-actions">
+        <button type="button" class="primary" data-copy="b64Texto">Copiar Base64</button>
+        <button type="button" data-copy="hexTexto">Copiar HEX</button>
+      </div>
+    </div>
+
+    <div id="blocoSemaforo" style="margin-top:22px">
+      <div class="out-head">
+        <strong>Pacote do semáforo</strong>
+        <span id="metaSemaforo"></span>
+      </div>
+      <code class="b64" id="b64Semaforo"></code>
+      <div class="row-actions">
+        <button type="button" data-copy="b64Semaforo">Copiar Base64</button>
+      </div>
+    </div>
+
+    <h2>JSON para a resposta da câmera</h2>
+    <textarea id="json" rows="7" readonly></textarea>
+    <div class="row-actions">
+      <button type="button" class="primary" data-copy="json">Copiar JSON</button>
+    </div>
+
+    <details>
+      <summary>Ver bytes em hexadecimal</summary>
+      <code class="b64" id="hexTexto" style="margin-top:8px"></code>
+    </details>
+
+    <div class="status" id="status"></div>
+  </div>
+</main>
+
+<footer>
+  <a href="./">Início</a> ·
+  <a href="https://github.com/Alphadigi-Brazil/PLI2020P">Código no GitHub</a> ·
+  <a href="PROTOCOL.md">Referência do protocolo</a>
+</footer>
+
+<script>
+"use strict";
+
+var CMD_RELAY = 0x0F, CMD_TEMP_TEXT = 0x62, CMD_MULTI_LINE = 0x6E;
+
+var CORES = {
+  RED:    [255, 0, 0],
+  GREEN:  [0, 255, 0],
+  YELLOW: [255, 255, 0],
+  OFF:    [0, 0, 0]
+};
+
+function crc16(bytes) {
+  var crc = 0xFFFF;
+  for (var i = 0; i < bytes.length; i++) {
+    crc ^= bytes[i];
+    for (var bit = 0; bit < 8; bit++) {
+      crc = (crc & 1) ? ((crc >>> 1) ^ 0xA001) : (crc >>> 1);
+      crc &= 0xFFFF;
+    }
+  }
+  return crc & 0xFFFF;
+}
+
+function utf8(texto) {
+  return new TextEncoder().encode(texto);
+}
+
+function packet(cmd, data) {
+  if (data.length > 255) { throw new Error("pacote com " + data.length + " bytes (máximo 255)"); }
+  var out = new Uint8Array(6 + data.length + 2);
+  out[0] = 0x00;              // DA
+  out[1] = 0x64;              // VR
+  out[2] = 0xFF;              // PN
+  out[3] = 0xFF;
+  out[4] = cmd;
+  out[5] = data.length;
+  out.set(data, 6);
+  var crc = crc16(out.subarray(0, 6 + data.length));
+  out[out.length - 2] = crc & 0xFF;
+  out[out.length - 1] = (crc >>> 8) & 0xFF;
+  return out;
+}
+
+function multiLine(linhas) {
+  var data = [];
+  data.push(0x00);                            // SAVE_FLAG
+  data.push(linhas.length);                   // TEXT_CONTEXT_NUMBER
+  for (var i = 0; i < linhas.length; i++) {
+    var l = linhas[i];
+    var txt = utf8(l.texto);
+    if (txt.length > 32) { return null; }      // limite recomendado do 0x6E
+    var cor = CORES[l.cor];
+    data.push(l.id, 0x00, 0x01, 0x05, 0x00);  // LID DM DS DT DR
+    data.push(cor[0], cor[1], cor[2], 0x00);  // TC
+    data.push(txt.length);                    // TL (1 byte no 0x6E)
+    for (var j = 0; j < txt.length; j++) { data.push(txt[j]); }
+    data.push(i === linhas.length - 1 ? 0x00 : 0x0D);
+  }
+  return new Uint8Array(data);
+}
+
+function singleLine(l) {
+  var txt = utf8(l.texto);
+  if (txt.length > 236) {
+    throw new Error("linha " + (l.id + 1) + " tem " + txt.length + " bytes (máximo 236)");
+  }
+  var cor = CORES[l.cor];
+  var data = [
+    l.id, 0x00, 0x01, 0x00, 0x05, 0x00, 0x01, 0x03, 0x00,   // TWID ETM ETS DM DT EXM EXS FINDEX DRS
+    cor[0], cor[1], cor[2], 0x00,                            // TC
+    0x00, 0x00, 0x00, 0x00,                                  // BC
+    txt.length & 0xFF, (txt.length >>> 8) & 0xFF             // TL
+  ];
+  for (var i = 0; i < txt.length; i++) { data.push(txt[i]); }
+  return new Uint8Array(data);
+}
+
+function relay(segundos) {
+  return packet(CMD_RELAY, new Uint8Array([0x00, 0x01, 0x00, 0x00, 0x00, segundos]));
+}
+
+function toBase64(bytes) {
+  var s = "";
+  for (var i = 0; i < bytes.length; i++) { s += String.fromCharCode(bytes[i]); }
+  return btoa(s);
+}
+
+function toHex(bytes) {
+  var out = [];
+  for (var i = 0; i < bytes.length; i++) {
+    out.push(("0" + bytes[i].toString(16).toUpperCase()).slice(-2));
+  }
+  return out.join(" ");
+}
+
+function lerCampos() {
+  var linhas = [];
+  for (var i = 0; i < 4; i++) {
+    var texto = document.getElementById("t" + i).value;
+    if (texto.length === 0) { continue; }
+    linhas.push({ id: i, texto: texto, cor: document.getElementById("c" + i).value });
+  }
+  var g = parseInt(document.getElementById("green").value, 10);
+  if (isNaN(g)) { g = 0; }
+  g = Math.max(0, Math.min(255, g));
+  return { linhas: linhas, green: g };
+}
+
+function atualizar() {
+  var erro = document.getElementById("erro");
+  var status = document.getElementById("status");
+  var jsonArea = document.getElementById("json");
+  var blocoTexto = document.getElementById("blocoTexto");
+  var blocoSemaforo = document.getElementById("blocoSemaforo");
+  erro.textContent = "";
+  status.textContent = "";
+
+  try {
+    var c = lerCampos();
+    var quadros = [];
+    var nomes = [];
+
+    if (c.linhas.length > 0) {
+      var multi = (c.linhas.length === 4) ? multiLine(c.linhas) : null;
+      if (multi !== null && multi.length <= 255) {
+        quadros.push(packet(CMD_MULTI_LINE, multi));
+        nomes.push("4 linhas em 1 pacote (CMD 0x6E)");
+      } else {
+        for (var i = 0; i < c.linhas.length; i++) {
+          quadros.push(packet(CMD_TEMP_TEXT, singleLine(c.linhas[i])));
+          nomes.push("linha " + (c.linhas[i].id + 1) + " (CMD 0x62)");
+        }
+      }
+    }
+    if (c.green > 0) {
+      quadros.push(relay(c.green));
+      nomes.push("semáforo verde " + c.green + " s (CMD 0x0F)");
+    }
+
+    if (quadros.length === 0) {
+      blocoTexto.style.display = "none";
+      blocoSemaforo.style.display = "none";
+      jsonArea.value = "";
+      document.getElementById("metaTexto").textContent = "";
+      document.getElementById("metaSemaforo").textContent = "";
+      status.textContent = "Preencha pelo menos uma linha ou informe os segundos de verde.";
+      return;
+    }
+
+    var temTexto = c.linhas.length > 0;
+    blocoTexto.style.display = temTexto ? "" : "none";
+    blocoSemaforo.style.display = (c.green > 0) ? "" : "none";
+
+    if (temTexto) {
+      var t = quadros[0];
+      document.getElementById("tituloTexto").textContent = nomes[0];
+      document.getElementById("metaTexto").textContent = "dataLen = " + t.length;
+      document.getElementById("b64Texto").textContent = toBase64(t);
+      document.getElementById("hexTexto").textContent = toHex(t);
+    }
+    if (c.green > 0) {
+      var r = quadros[quadros.length - 1];
+      document.getElementById("metaSemaforo").textContent = "dataLen = " + r.length;
+      document.getElementById("b64Semaforo").textContent = toBase64(r);
+    }
+
+    var itens = [];
+    for (var k = 0; k < quadros.length; k++) {
+      itens.push('{"serialChannel":0,"data":"' + toBase64(quadros[k])
+                 + '","dataLen":' + quadros[k].length + "}");
+    }
+    jsonArea.value = '{"serialData":[' + itens.join(",") + "]}";
+    status.textContent = "Gerado: " + nomes.join(" + ") + ".";
+  } catch (e) {
+    erro.textContent = "Erro: " + e.message;
+    jsonArea.value = "";
+  }
+}
+
+document.addEventListener("input", atualizar);
+
+document.addEventListener("click", function (ev) {
+  var alvo = ev.target;
+  if (alvo.dataset && alvo.dataset.copy) {
+    var texto = document.getElementById(alvo.dataset.copy).value
+      || document.getElementById(alvo.dataset.copy).textContent;
+    copiar(texto, alvo);
+  }
+  if (alvo.dataset && alvo.dataset.preset) {
+    aplicarPreset(alvo.dataset.preset);
+  }
+});
+
+function copiar(texto, botao) {
+  var rotulo = botao.textContent;
+  function feito() {
+    botao.textContent = "Copiado!";
+    setTimeout(function () { botao.textContent = rotulo; }, 1200);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(feito, function () { selecionar(texto); });
+  } else {
+    selecionar(texto);
+    feito();
+  }
+}
+
+function selecionar(texto) {
+  var ta = document.createElement("textarea");
+  ta.value = texto;
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); } catch (e) { /* ignora */ }
+  document.body.removeChild(ta);
+}
+
+function definir(i, texto, cor) {
+  document.getElementById("t" + i).value = texto;
+  document.getElementById("c" + i).value = cor;
+}
+
+function aplicarPreset(nome) {
+  if (nome === "entrada") {
+    definir(0, "`D-`M-20`Y", "GREEN");
+    definir(1, "`H:`N:`S", "GREEN");
+    definir(2, "Vaga 999", "YELLOW");
+    definir(3, "Bem-vindo!", "GREEN");
+    document.getElementById("green").value = 5;
+  } else if (nome === "saida") {
+    definir(0, "`H:`N:`S", "GREEN");
+    definir(1, "`D-`M-20`Y", "GREEN");
+    definir(2, "ABC-1234", "YELLOW");
+    definir(3, "Siga em frente!", "GREEN");
+    document.getElementById("green").value = 10;
+  } else if (nome === "semaforo") {
+    definir(0, "", "GREEN");
+    definir(1, "", "RED");
+    definir(2, "", "RED");
+    definir(3, "", "GREEN");
+    document.getElementById("green").value = 10;
+  } else {
+    definir(0, "", "GREEN");
+    definir(1, "", "RED");
+    definir(2, "", "RED");
+    definir(3, "", "GREEN");
+    document.getElementById("green").value = 0;
+  }
+  atualizar();
+}
+
+atualizar();
+</script>
+</body>
+</html>

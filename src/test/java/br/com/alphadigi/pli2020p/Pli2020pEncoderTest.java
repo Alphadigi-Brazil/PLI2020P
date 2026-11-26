@@ -113,6 +113,18 @@ class Pli2020pEncoderTest {
     }
 
     @Test
+    void base64IsAFaithfulEncodingOfTheFrame() {
+        List<SerialData> frames = Pli2020pEncoder.encode(PliDisplayRequest.builder()
+                .line(0, "Ação", PliColor.RED)
+                .line(1, "光临", PliColor.GREEN)
+                .greenLightSeconds(3)
+                .build());
+
+        for (SerialData frame : frames) {
+            assertArrayEquals(frame.getBytes(), Base64.getDecoder().decode(frame.getData()));
+        }
+    }
+    @Test
     void everyFrameCanBeParsedBack() {
         List<SerialData> frames = Pli2020pEncoder.encode(PliDisplayRequest.builder()
                 .line(0, "A", PliColor.RED)

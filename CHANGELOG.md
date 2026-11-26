@@ -17,5 +17,11 @@ Versionamento [SemVer](https://semver.org/lang/pt-BR/).
 - Codificação de texto UTF-8 (padrão) ou GBK.
 - `SerialData` com Base64, `dataLen`, hex e JSON.
 - `PliFrameParser` para validar quadros capturados no RS485.
-- Suíte de regressão comparando byte a byte com quadros capturados em campo.
-- Build Maven, wrapper e GitHub Actions em Java 8/11/17/21.
+- **Versão de arquivo único** (`standalone/Pli2020p.java`): copiar um arquivo e usar, sem Maven;
+  inclui `--selftest` para conferir a integridade.
+- **Calculadora web** (`docs/calculadora.html`): gera Base64, `dataLen`, JSON e HEX no navegador,
+  sem instalar nada. Publicada em GitHub Pages.
+- README em português e inglês, referência do protocolo e página inicial das ferramentas.
+- Suíte de 18 testes comparando byte a byte com quadros capturados em campo.
+- Build Maven, wrapper e GitHub Actions em Java 8/11/17/21, incluindo verificação da versão de
+  arquivo único e da calculadora.

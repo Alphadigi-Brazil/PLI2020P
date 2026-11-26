@@ -30,6 +30,15 @@ jobs:
       - name: Build and test
         run: mvn -B -ntp verify
 
+      - name: Standalone single-file class
+        run: |
+          mkdir -p target/standalone
+          javac -encoding UTF-8 -d target/standalone standalone/Pli2020p.java
+          java -cp target/standalone pli2020p.Pli2020p --selftest
+
+      - name: Calculator matches the encoder
+        run: node tools/check-calculator.js
+
       - name: Demo output
         if: matrix.java == '17'
         run: java -cp target/classes br.com.alphadigi.pli2020p.demo.PliDemo

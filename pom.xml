@@ -15,7 +15,7 @@
     RS485 frames of the PLI2020P LED display controller, and returns them as Base64 + dataLen
     ready to be placed in an LPR camera HTTP response.
   </description>
-  <url>https://github.com/alphadigi-brazil/PLI2020P</url>
+  <url>https://github.com/Alphadigi-Brazil/PLI2020P</url>
 
   <licenses>
     <license>
@@ -30,14 +30,14 @@
       <name>Alpha Digi Brazil</name>
       <email>zimin@alphadigi.com.br</email>
       <organization>Alpha Digi Brazil</organization>
-      <organizationUrl>https://github.com/alphadigi-brazil</organizationUrl>
+      <organizationUrl>https://github.com/Alphadigi-Brazil</organizationUrl>
     </developer>
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/alphadigi-brazil/PLI2020P.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/alphadigi-brazil/PLI2020P.git</developerConnection>
-    <url>https://github.com/alphadigi-brazil/PLI2020P</url>
+    <connection>scm:git:git://github.com/Alphadigi-Brazil/PLI2020P.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/Alphadigi-Brazil/PLI2020P.git</developerConnection>
+    <url>https://github.com/Alphadigi-Brazil/PLI2020P</url>
     <tag>v1.0.0</tag>
   </scm>
 

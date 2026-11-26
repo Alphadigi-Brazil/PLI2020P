@@ -1,6 +1,6 @@
 # PLI2020P — Codificador de mensagens para painel de LED
 
-[![build](https://github.com/alphadigi-brazil/PLI2020P/actions/workflows/build.yml/badge.svg)](https://github.com/alphadigi-brazil/PLI2020P/actions/workflows/build.yml)
+[![build](https://github.com/Alphadigi-Brazil/PLI2020P/actions/workflows/build.yml/badge.svg)](https://github.com/Alphadigi-Brazil/PLI2020P/actions/workflows/build.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![java](https://img.shields.io/badge/java-8%2B-orange.svg)](pom.xml)
 
@@ -63,7 +63,7 @@ A câmera decodifica o Base64 em HEX e transmite pelo RS485. O `dataLen` é a qu
 O artefato ainda não está publicado em repositório central. Gere e instale localmente:
 
 ```bash
-git clone https://github.com/alphadigi-brazil/PLI2020P.git
+git clone https://github.com/Alphadigi-Brazil/PLI2020P.git
 cd PLI2020P
 mvn install
 ```
